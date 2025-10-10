@@ -1,0 +1,11 @@
+C:\Users\User\source\repos\MO31_2_Myasoedov_Andrew\MO31_2_Myasoedov_Andrew\bin\Debug\MO31_2_Myasoedov_Andrew.exe.config
+C:\Users\User\source\repos\MO31_2_Myasoedov_Andrew\MO31_2_Myasoedov_Andrew\bin\Debug\MO31_2_Myasoedov_Andrew.exe
+C:\Users\User\source\repos\MO31_2_Myasoedov_Andrew\MO31_2_Myasoedov_Andrew\bin\Debug\MO31_2_Myasoedov_Andrew.pdb
+C:\Users\User\source\repos\MO31_2_Myasoedov_Andrew\MO31_2_Myasoedov_Andrew\obj\Debug\MO31_2_Myasoedov_Andrew.csproj.AssemblyReference.cache
+C:\Users\User\source\repos\MO31_2_Myasoedov_Andrew\MO31_2_Myasoedov_Andrew\obj\Debug\MO31_2_Myasoedov_Andrew.Form1.resources
+C:\Users\User\source\repos\MO31_2_Myasoedov_Andrew\MO31_2_Myasoedov_Andrew\obj\Debug\MO31_2_Myasoedov_Andrew.Properties.Resources.resources
+C:\Users\User\source\repos\MO31_2_Myasoedov_Andrew\MO31_2_Myasoedov_Andrew\obj\Debug\MO31_2_Myasoedov_Andrew.csproj.GenerateResource.cache
+C:\Users\User\source\repos\MO31_2_Myasoedov_Andrew\MO31_2_Myasoedov_Andrew\obj\Debug\MO31_2_Myasoedov_Andrew.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\MO31_2_Myasoedov_Andrew\MO31_2_Myasoedov_Andrew\obj\Debug\MO31_2_Myasoedov_Andrew.exe
+C:\Users\User\source\repos\MO31_2_Myasoedov_Andrew\MO31_2_Myasoedov_Andrew\obj\Debug\MO31_2_Myasoedov_Andrew.pdb
+C:\Users\User\source\repos\MO31_2_Myasoedov_Andrew\MO31_2_Myasoedov_Andrew\obj\Debug\MO31_2_Myasoedov_Andrew.exe.config
