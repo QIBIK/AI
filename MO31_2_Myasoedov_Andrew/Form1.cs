@@ -8,12 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using MO31_2_Myasoedov_Andrew.NeuroNet;
 
 namespace MO31_2_Myasoedov_Andrew
 {
     public partial class Form1 : Form
     {
-        private double[] inputPixels;
+        private double[] inputPixels; // массив входных данных
+        private Network network; // объявление нейросети
 
         //Конструктор
         public Form1()
@@ -21,6 +23,7 @@ namespace MO31_2_Myasoedov_Andrew
             InitializeComponent();
 
             inputPixels = new double[15]; //Количество пикселей
+            network = new Network();
         }
 
         private void Changing_State_Pixel_Button_Click(object sender, EventArgs e)

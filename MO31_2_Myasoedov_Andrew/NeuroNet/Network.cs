@@ -1,37 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MO31_2_Myasoedov_Andrew.NeuroNet
+﻿namespace MO31_2_Myasoedov_Andrew.NeuroNet
 {
-    internal class Network
+    class Network
     {
-        private HiddenLayer hiddenLayer1;
-        private HiddenLayer hiddenLayer2;
-        private OutputLayer outputLayer;
+        // все слои сети
+        private InputLayer input_layer = null;
+        private HiddenLayer hidden_layer1 = new HiddenLayer(70, 15, NeuronType.Hidden, nameof(hidden_layer1));
+        private HiddenLayer hidden_layer2 = new HiddenLayer(35, 70, NeuronType.Hidden, nameof(hidden_layer2));
+        private OutputLayer output_layer = new OutputLayer(10, 35, NeuronType.Output, nameof(output_layer));
 
-        public Network()
-        {
-            // Архитектура сети: 15 -> 70 -> 35 -> 10
-            hiddenLayer1 = new HiddenLayer(70, 15, nameof(hiddenLayer1));
-            hiddenLayer2 = new HiddenLayer(35, 70, nameof(hiddenLayer2));
-            outputLayer = new OutputLayer(10, 35, nameof(outputLayer));
-        }
+        private double[] fact = new double[10]; // массив фактического выхода сети
+        private double[] e_errors_avr; // среднее значение энергии ошибки эпохи обучения
 
-        public double[] Run(double[] input)
-        {
-            hiddenLayer1.Data = input;
-            double[] outHidden1 = hiddenLayer1.Neurons.Select(n => n.Output).ToArray();
+        // свойства
+        public double[] Fact { get => fact; } // массив фактического выхода сети
 
-            hiddenLayer2.Data = outHidden1;
-            double[] outHidden2 = hiddenLayer2.Neurons.Select(n => n.Output).ToArray();
+        // среднее значение энергии ошибки эпохи обучения
+        public double[] E_errors_avr { get => e_errors_avr; set => e_errors_avr = value; }
 
-            outputLayer.Data = outHidden2;
-            double[] outFinal = outputLayer.Neurons.Select(n => n.Output).ToArray();
-
-            return outFinal;
-        }
+        // Конструктор
+        public Network() { }
     }
 }

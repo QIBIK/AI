@@ -126,5 +126,7 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
             }
             return weights;
         }
+        abstract public void Recognize(Network net, Layer nextLayer); // для прямы проходов
+        abstract public double[] BackwardPass(double[] stuff); // и обратных
     }
 }
