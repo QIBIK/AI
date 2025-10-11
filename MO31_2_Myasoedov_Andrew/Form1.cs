@@ -21,9 +21,6 @@ namespace MO31_2_Myasoedov_Andrew
             InitializeComponent();
 
             inputPixels = new double[15]; //Количество пикселей
-
-            // создаём нейросеть при запуске программы
-            var net = new MO31_2_Myasoedov_Andrew.NeuroNet.Network();
         }
 
         private void Changing_State_Pixel_Button_Click(object sender, EventArgs e)
@@ -69,5 +66,12 @@ namespace MO31_2_Myasoedov_Andrew
             File.AppendAllText(path, tmpStr); // добавление текста tmpStr
                                               // в файл, расположенный по path
         }
+
+        private void button_CreateNetwork_Click(object sender, EventArgs e)
+        {
+            var net = new MO31_2_Myasoedov_Andrew.NeuroNet.Network();
+            MessageBox.Show("Нейросеть создана!\nФайлы весов сохранены в папке memory.");
+        }
+
     }
 }

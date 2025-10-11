@@ -46,6 +46,7 @@
             this.numericUpDownNecessary = new System.Windows.Forms.NumericUpDown();
             this.button_SaveTrainSample = new System.Windows.Forms.Button();
             this.button_SaveTestSample = new System.Windows.Forms.Button();
+            this.button16 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNecessary)).BeginInit();
             this.SuspendLayout();
             // 
@@ -246,7 +247,7 @@
             // 
             // numericUpDownNecessary
             // 
-            this.numericUpDownNecessary.Location = new System.Drawing.Point(389, 128);
+            this.numericUpDownNecessary.Location = new System.Drawing.Point(455, 118);
             this.numericUpDownNecessary.Name = "numericUpDownNecessary";
             this.numericUpDownNecessary.Size = new System.Drawing.Size(100, 22);
             this.numericUpDownNecessary.TabIndex = 15;
@@ -271,11 +272,22 @@
             this.button_SaveTestSample.UseVisualStyleBackColor = true;
             this.button_SaveTestSample.Click += new System.EventHandler(this.button_SaveTestSample_Click);
             // 
+            // button16
+            // 
+            this.button16.Location = new System.Drawing.Point(609, 199);
+            this.button16.Name = "button16";
+            this.button16.Size = new System.Drawing.Size(100, 100);
+            this.button16.TabIndex = 18;
+            this.button16.Text = "Create Network";
+            this.button16.UseVisualStyleBackColor = true;
+            this.button16.Click += new System.EventHandler(this.button_CreateNetwork_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button16);
             this.Controls.Add(this.button_SaveTestSample);
             this.Controls.Add(this.button_SaveTrainSample);
             this.Controls.Add(this.numericUpDownNecessary);
@@ -321,6 +333,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDownNecessary;
         private System.Windows.Forms.Button button_SaveTrainSample;
         private System.Windows.Forms.Button button_SaveTestSample;
+        private System.Windows.Forms.Button button16;
     }
 }
 
