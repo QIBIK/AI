@@ -89,44 +89,72 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
                     break;
 
                 case MemoryMode.SET:
-                    using (StreamWriter sw = new StreamWriter(path))
+                    tmpStr = "";
+                    for (i = 0; i < numofneurons; i++)
                     {
-                        for (i = 0; i < numofneurons; i++)
+                        string[] tmpRow = new string[numofprevneurons + 1];
+                        for (j = 0; j < numofprevneurons + 1; j++)
                         {
-                            for (j = 0; j < numofprevneurons + 1; j++)
-                            {
-                                sw.Write(Neurons[i].Weights[j].ToString("F6",
-                                    System.Globalization.CultureInfo.InvariantCulture));
-                                if (j < numofprevneurons)
-                                    sw.Write(";");
-                            }
-                            sw.WriteLine();
+                            tmpRow[j] = Neurons[i].Weights[j]
+                                .ToString(System.Globalization.CultureInfo.InvariantCulture);
                         }
+                        tmpStr += string.Join(";", tmpRow) + "\n";
                     }
+                    File.WriteAllText(path, tmpStr);
                     break;
 
                 case MemoryMode.INIT:
-                    Random rnd = new Random();
-                    using (StreamWriter sw = new StreamWriter(path))
+                    Random random = new Random();
+                    for (i = 0; i < numofneurons; i++)
                     {
-                        for (i = 0; i < numofneurons; i++)
+                        double sum = 0.0;
+                        double squaredSum = 0.0;
+
+                        // Генерация случайных весов [-1; +1]
+                        for (j = 0; j < numofprevneurons + 1; j++)
                         {
-                            for (j = 0; j < numofprevneurons + 1; j++)
-                            {
-                                weights[i, j] = rnd.NextDouble() * 2 - 1; // [-1; +1]
-                                sw.Write(weights[i, j].ToString("F6",
-                                    System.Globalization.CultureInfo.InvariantCulture));
-                                if (j < numofprevneurons)
-                                    sw.Write(";");
-                            }
-                            sw.WriteLine();
+                            weights[i, j] = random.NextDouble() * 2.0 - 1.0;
+                            sum += weights[i, j];
+                            squaredSum += weights[i, j] * weights[i, j];
+                        }
+
+                        // Нормализация весов (среднее = 0, σ = 1)
+                        double mean = sum / (numofprevneurons + 1);
+                        double variance = (squaredSum / (numofprevneurons + 1)) - (mean * mean);
+                        double root = Math.Sqrt(Math.Max(variance, 1e-8)); // защита от деления на 0
+
+                        for (j = 0; j < numofprevneurons + 1; j++)
+                        {
+                            weights[i, j] = (weights[i, j] - mean) / root;
                         }
                     }
+
+                    // Сохранение весов в CSV
+                    string[] lines = new string[numofneurons];
+                    for (i = 0; i < numofneurons; i++)
+                    {
+                        string[] row = new string[numofprevneurons + 1];
+                        for (j = 0; j < numofprevneurons + 1; j++)
+                        {
+                            row[j] = weights[i, j]
+                                .ToString(System.Globalization.CultureInfo.InvariantCulture)
+                                .Replace('.', ',');
+                        }
+                        lines[i] = string.Join(";", row);
+                    }
+                    File.WriteAllLines(path, lines);
                     break;
             }
             return weights;
         }
-        abstract public void Recognize(Network net, Layer nextLayer); // для прямы проходов
-        abstract public double[] BackwardPass(double[] stuff); // и обратных
+        abstract public void Recognize(Network net, Layer nextLayer); //для прямых проходов
+        abstract public double[] BackwardPass(double[] stuff); //и обратных
     }
 }
+
+
+//как генерируется синаптические веса
+// Синаптические веса должны быть случайными значениями от -1 до +1
+// У каждого нейрона синаптические веса и порог, среднее мат ожидание должно быть = 0
+// Среднее квадратичное отклонение должно быть = 1
+

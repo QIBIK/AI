@@ -47,6 +47,9 @@
             this.button_SaveTrainSample = new System.Windows.Forms.Button();
             this.button_SaveTestSample = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
+            this.label_out = new System.Windows.Forms.Label();
+            this.label_probability = new System.Windows.Forms.Label();
+            this.button_Recognize = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNecessary)).BeginInit();
             this.SuspendLayout();
             // 
@@ -247,14 +250,14 @@
             // 
             // numericUpDownNecessary
             // 
-            this.numericUpDownNecessary.Location = new System.Drawing.Point(455, 118);
+            this.numericUpDownNecessary.Location = new System.Drawing.Point(312, 72);
             this.numericUpDownNecessary.Name = "numericUpDownNecessary";
             this.numericUpDownNecessary.Size = new System.Drawing.Size(100, 22);
             this.numericUpDownNecessary.TabIndex = 15;
             // 
             // button_SaveTrainSample
             // 
-            this.button_SaveTrainSample.Location = new System.Drawing.Point(312, 199);
+            this.button_SaveTrainSample.Location = new System.Drawing.Point(312, 134);
             this.button_SaveTrainSample.Name = "button_SaveTrainSample";
             this.button_SaveTrainSample.Size = new System.Drawing.Size(100, 100);
             this.button_SaveTrainSample.TabIndex = 16;
@@ -264,7 +267,7 @@
             // 
             // button_SaveTestSample
             // 
-            this.button_SaveTestSample.Location = new System.Drawing.Point(455, 199);
+            this.button_SaveTestSample.Location = new System.Drawing.Point(312, 271);
             this.button_SaveTestSample.Name = "button_SaveTestSample";
             this.button_SaveTestSample.Size = new System.Drawing.Size(100, 100);
             this.button_SaveTestSample.TabIndex = 17;
@@ -274,19 +277,48 @@
             // 
             // button16
             // 
-            this.button16.Location = new System.Drawing.Point(609, 199);
+            this.button16.Location = new System.Drawing.Point(0, 0);
             this.button16.Name = "button16";
-            this.button16.Size = new System.Drawing.Size(100, 100);
-            this.button16.TabIndex = 18;
-            this.button16.Text = "Create Network";
-            this.button16.UseVisualStyleBackColor = true;
-            this.button16.Click += new System.EventHandler(this.button_CreateNetwork_Click);
+            this.button16.Size = new System.Drawing.Size(75, 23);
+            this.button16.TabIndex = 0;
+            // 
+            // label_out
+            // 
+            this.label_out.AutoSize = true;
+            this.label_out.Location = new System.Drawing.Point(643, 134);
+            this.label_out.Name = "label_out";
+            this.label_out.Size = new System.Drawing.Size(62, 16);
+            this.label_out.TabIndex = 18;
+            this.label_out.Text = "label_out";
+            this.label_out.Click += new System.EventHandler(this.button_Recognize_Click);
+            // 
+            // label_probability
+            // 
+            this.label_probability.AutoSize = true;
+            this.label_probability.Location = new System.Drawing.Point(626, 218);
+            this.label_probability.Name = "label_probability";
+            this.label_probability.Size = new System.Drawing.Size(107, 16);
+            this.label_probability.TabIndex = 19;
+            this.label_probability.Text = "label_probability";
+            // 
+            // button_Recognize
+            // 
+            this.button_Recognize.Location = new System.Drawing.Point(480, 134);
+            this.button_Recognize.Name = "button_Recognize";
+            this.button_Recognize.Size = new System.Drawing.Size(100, 100);
+            this.button_Recognize.TabIndex = 20;
+            this.button_Recognize.Text = "Recognize";
+            this.button_Recognize.UseVisualStyleBackColor = true;
+            this.button_Recognize.Click += new System.EventHandler(this.button_Recognize_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button_Recognize);
+            this.Controls.Add(this.label_probability);
+            this.Controls.Add(this.label_out);
             this.Controls.Add(this.button16);
             this.Controls.Add(this.button_SaveTestSample);
             this.Controls.Add(this.button_SaveTrainSample);
@@ -310,6 +342,7 @@
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownNecessary)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -334,6 +367,9 @@
         private System.Windows.Forms.Button button_SaveTrainSample;
         private System.Windows.Forms.Button button_SaveTestSample;
         private System.Windows.Forms.Button button16;
+        private System.Windows.Forms.Label label_out;
+        private System.Windows.Forms.Label label_probability;
+        private System.Windows.Forms.Button button_Recognize;
     }
 }
 

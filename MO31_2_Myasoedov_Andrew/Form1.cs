@@ -14,6 +14,8 @@ namespace MO31_2_Myasoedov_Andrew
 {
     public partial class Form1 : Form
     {
+        private Layer outputLayer;
+        private Layer hiddenLayer;
         private double[] inputPixels; // массив входных данных
         private Network network; // объявление нейросети
 
@@ -70,10 +72,11 @@ namespace MO31_2_Myasoedov_Andrew
                                               // в файл, расположенный по path
         }
 
-        private void button_CreateNetwork_Click(object sender, EventArgs e)
+        private void button_Recognize_Click(object sender, EventArgs e)
         {
-            var net = new MO31_2_Myasoedov_Andrew.NeuroNet.Network();
-            MessageBox.Show("Нейросеть создана!\nФайлы весов сохранены в папке memory.");
+            network.ForwardPass(network, inputPixels);
+            label_out.Text = network.Fact.ToList().IndexOf(network.Fact.Max()).ToString();
+            label_probability.Text = (100 * network.Fact.Max()).ToString("0.00") + " %";
         }
 
     }

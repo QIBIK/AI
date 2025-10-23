@@ -19,5 +19,13 @@
 
         // Конструктор
         public Network() { }
+
+        public void ForwardPass(Network net, double[] netInput)
+        {
+            net.hidden_layer1.Data = netInput;
+            net.hidden_layer1.Recognize(null, net.hidden_layer2);
+            net.hidden_layer2.Recognize(null, net.output_layer);
+            net.output_layer.Recognize(net, null);
+        }
     }
 }
