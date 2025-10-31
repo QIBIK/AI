@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -77,6 +74,12 @@ namespace MO31_2_Myasoedov_Andrew
             network.ForwardPass(network, inputPixels);
             label_out.Text = network.Fact.ToList().IndexOf(network.Fact.Max()).ToString();
             label_probability.Text = (100 * network.Fact.Max()).ToString("0.00") + " %";
+        }
+        private void button_Train_Click(object sender, EventArgs e)
+        {
+            network.Train(network);
+
+            MessageBox.Show("Обучение успешно завершено.", "информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
     }
