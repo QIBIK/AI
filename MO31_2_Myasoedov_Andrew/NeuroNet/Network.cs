@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace MO31_2_Myasoedov_Andrew.NeuroNet
 {
@@ -33,7 +34,7 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
         public void Train(Network net)
         {
             net.input_layer = new InputLayer(NetworkMode.Train);
-            int epoches = 20;
+            int epoches = 100;
             double tmpSumError;
             double[] errors;
             double[] temp_gsums1;
@@ -72,10 +73,10 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
                 }
 
 
-                string pathDirWeights = AppDomain.CurrentDomain.BaseDirectory + "memory\\";
-                net.hidden_layer1.WeightInitialize(MemoryMode.SET, pathDirWeights + nameof(hidden_layer1) + "_memory.csv");
-                net.hidden_layer2.WeightInitialize(MemoryMode.SET, pathDirWeights + nameof(hidden_layer2) + "_memory.csv");
-                net.output_layer.WeightInitialize(MemoryMode.SET, pathDirWeights + nameof(output_layer) + "_memory.csv");
+                string pathDirWeights = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "memory");
+                net.hidden_layer1.WeightInitialize(MemoryMode.SET, Path.Combine(pathDirWeights, nameof(hidden_layer1) + "_memory.csv"));
+                net.hidden_layer2.WeightInitialize(MemoryMode.SET, Path.Combine(pathDirWeights, nameof(hidden_layer2) + "_memory.csv"));
+                net.output_layer.WeightInitialize(MemoryMode.SET, Path.Combine(pathDirWeights, nameof(output_layer) + "_memory.csv"));
             }
         }
     }

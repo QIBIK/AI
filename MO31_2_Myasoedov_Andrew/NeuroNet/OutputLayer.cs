@@ -15,13 +15,21 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
         // прямой проход
         public override void Recognize(Network net, Layer nextLayer)
         {
-            double  e_sum = 0;
-            for (int i = 0; i < neurons.Length; i++)
-                e_sum += neurons[i].Output;
+            double max = neurons.Max(n => n.Output);
 
-            for (int i = 0; i < neurons.Length; i++)
-                net.Fact[i] = neurons[i].Output / e_sum;
+            double[] expVals = new double[numofneurons];
+            double sumExp = 0;
+
+            for (int i = 0; i < numofneurons; i++)
+            {
+                expVals[i] = Math.Exp(neurons[i].Output - max); // стабилизированная softmax
+                sumExp += expVals[i];
+            }
+
+            for (int i = 0; i < numofneurons; i++)
+                net.Fact[i] = expVals[i] / sumExp;
         }
+
 
         // обратный проход
         public override double[] BackwardPass(double[] errors)

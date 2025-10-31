@@ -29,7 +29,7 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
 
                         for (int j = 0; j < 16; j++)
                         {
-                            trainset[i, j] = double.Parse(tmpStr[j]);
+                            trainset[i, j] = double.Parse(tmpStr[j], System.Globalization.CultureInfo.InvariantCulture);
                         }
                     }
                     Shuffling_Array_Rows(trainset);
@@ -45,7 +45,7 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
 
                         for (int j = 0; j < 16; j++)
                         {
-                            testset[i, j] = double.Parse(tmpStr[j]);
+                            testset[i, j] = double.Parse(tmpStr[j], System.Globalization.CultureInfo.InvariantCulture);
                         }
                     }
                     Shuffling_Array_Rows(testset);

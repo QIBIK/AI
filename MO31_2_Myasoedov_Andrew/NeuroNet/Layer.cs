@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Reflection.Emit;
 using System.Windows.Forms;
@@ -39,8 +40,8 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
             numofprevneurons = nopn; // количество нейронов предыдущего слоя
             Neurons = new Neuron[non]; // определение массива нейронов
             name_Layer = nm_Layer; // наименование слоя, котоое используется
-            pathDirWeights = AppDomain.CurrentDomain.BaseDirectory + "memory\\";
-            pathFileWeights = pathDirWeights + name_Layer + "memory.csv";
+            pathDirWeights = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "memory");
+            pathFileWeights = Path.Combine(pathDirWeights, name_Layer + "_memory.csv");
 
             lastdeltaweights = new double[non, nopn + 1];
             double[,] Weights; // временный массив синаптических весов текущего
@@ -71,24 +72,41 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
             string tmpStr;
             string[] tmpStrWeights;
             double[,] weights = new double[numofneurons, numofprevneurons + 1];
-        
+
             switch (mm)
             {
                 case MemoryMode.GET:
-                    tmpStrWeights = File.ReadAllLines(path); // считываение строк текстового
+                    // чтение строк
+                    tmpStrWeights = File.ReadAllLines(path);
                     string[] memory_element;
+                    bool hasBad = false;
+
                     for (i = 0; i < numofneurons; i++)
                     {
-                        memory_element = tmpStrWeights[i].Split(delim); // разбивает строку
+                        memory_element = tmpStrWeights[i].Split(delim, StringSplitOptions.RemoveEmptyEntries);
                         for (j = 0; j < numofprevneurons + 1; j++)
                         {
-                            weights[i, j] = double.Parse(memory_element[j].Replace(',', '.'),
-                                System.Globalization.CultureInfo.InvariantCulture);
+                            // безопасное парсирование с InvariantCulture
+                            weights[i, j] = double.Parse(
+                                memory_element[j],
+                                CultureInfo.InvariantCulture);
+
+                            if (double.IsNaN(weights[i, j]) || double.IsInfinity(weights[i, j]))
+                                hasBad = true;
                         }
+                    }
+
+                    // Если обнаружили NaN/Inf — регенерируем и перезаписываем
+                    if (hasBad)
+                    {
+                        // регенерируем через INIT и перезаписываем файл
+                        double[,] regenerated = WeightInitialize(MemoryMode.INIT, path);
+                        return regenerated;
                     }
                     break;
 
                 case MemoryMode.SET:
+                    // сохраняем текущие веса из нейронов
                     tmpStr = "";
                     for (i = 0; i < numofneurons; i++)
                     {
@@ -96,7 +114,7 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
                         for (j = 0; j < numofprevneurons + 1; j++)
                         {
                             tmpRow[j] = Neurons[i].Weights[j]
-                                .ToString(System.Globalization.CultureInfo.InvariantCulture);
+                                .ToString(CultureInfo.InvariantCulture);
                         }
                         tmpStr += string.Join(";", tmpRow) + "\n";
                     }
@@ -104,47 +122,36 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
                     break;
 
                 case MemoryMode.INIT:
+                    // Xavier (Glorot) uniform initialization: U(-limit, limit)
                     Random random = new Random();
+                    double limit = Math.Sqrt(6.0 / (numofprevneurons + numofneurons)); // note: numofprevneurons + numofneurons
+
                     for (i = 0; i < numofneurons; i++)
                     {
-                        double sum = 0.0;
-                        double squaredSum = 0.0;
-
-                        // Генерация случайных весов [-1; +1]
                         for (j = 0; j < numofprevneurons + 1; j++)
                         {
-                            weights[i, j] = random.NextDouble() * 2.0 - 1.0;
-                            sum += weights[i, j];
-                            squaredSum += weights[i, j] * weights[i, j];
-                        }
-
-                        // Нормализация весов (среднее = 0, σ = 1)
-                        double mean = sum / (numofprevneurons + 1);
-                        double variance = (squaredSum / (numofprevneurons + 1)) - (mean * mean);
-                        double root = Math.Sqrt(Math.Max(variance, 1e-8)); // защита от деления на 0
-
-                        for (j = 0; j < numofprevneurons + 1; j++)
-                        {
-                            weights[i, j] = (weights[i, j] - mean) / root;
+                            // для bias (j==0) также задаём случайный вес в том же диапазоне
+                            weights[i, j] = random.NextDouble() * 2.0 * limit - limit;
                         }
                     }
 
-                    // Сохранение весов в CSV
-                    string[] lines = new string[numofneurons];
-                    for (i = 0; i < numofneurons; i++)
+                    // запись в CSV (InvariantCulture)
                     {
-                        string[] row = new string[numofprevneurons + 1];
-                        for (j = 0; j < numofprevneurons + 1; j++)
+                        string[] lines = new string[numofneurons];
+                        for (i = 0; i < numofneurons; i++)
                         {
-                            row[j] = weights[i, j]
-                                .ToString(System.Globalization.CultureInfo.InvariantCulture)
-                                .Replace('.', ',');
+                            string[] row = new string[numofprevneurons + 1];
+                            for (j = 0; j < numofprevneurons + 1; j++)
+                            {
+                                row[j] = weights[i, j].ToString(CultureInfo.InvariantCulture);
+                            }
+                            lines[i] = string.Join(";", row);
                         }
-                        lines[i] = string.Join(";", row);
+                        File.WriteAllLines(path, lines);
                     }
-                    File.WriteAllLines(path, lines);
                     break;
             }
+
             return weights;
         }
         abstract public void Recognize(Network net, Layer nextLayer); //для прямых проходов
