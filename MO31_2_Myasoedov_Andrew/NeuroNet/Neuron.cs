@@ -1,23 +1,17 @@
-﻿using System;
-using System.Diagnostics.SymbolStore;
-using static System.Math;
+﻿using static System.Math;
 
 namespace MO31_2_Myasoedov_Andrew.NeuroNet
 {
     class Neuron
     {
-        // поля
         private NeuronType type; // тип нейрона
         private double[] weights; // его веса
         private double[] inputs; // его входы
-        private double output; // его выход
+        private double output; // его выходы
         private double derivative; // производная
 
-        // константы для функции активации
-        private double a = 0.01d;
-
         // свойства
-        public double[]  Weights { get => weights; set => weights = value; }
+        public double[] Weights { get => weights; set => weights = value; }
         public double[] Inputs { get => inputs; set => inputs = value; }
         public double Output { get => output; }
         public double Derivative { get => derivative; }
@@ -29,50 +23,47 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
             weights = memoryWeights;
         }
 
-        // метод активации нейрона
+
         public void Activator(double[] i)
         {
             inputs = i; // передача вектора входного сигнала в массив входных данных нейрона
-            
-            double sum = weights[0]; // аффиное преобразование через смещение (нулевой вес 
+            double sum = weights[0]; // кладём первый элемент в сумму
 
             for (int j = 0; j < inputs.Length; j++) // цикл вычисления индуцированного поля нейрона
             {
-                sum += inputs[j] * weights[j + 1]; // линейные преобразования входных сигналов
+                sum += inputs[j] * weights[j + 1]; // линейное преобразование входных сигналов 
             }
 
             switch (type)
             {
-                case NeuronType.Hidden: // для нейронов скрытого слоя
-                    output = Tanh(sum);
-                    derivative = Tanh_Derivativator(sum);
+                case NeuronType.Hidden:  // для нейронов скрытого слоя
+                    output = HyperbolicTangent(sum);
+                    derivative = DerivativeHyperbolicTangent(output);
                     break;
 
                 case NeuronType.Output: // для нейронов выходного слоя
-                    output = Tanh(sum);
-                    derivative = Tanh_Derivativator(sum);
+                    output = Exp(sum);
                     break;
             }
         }
 
-        // Гиперболический тангенс
-        private double Tanh(double x)
-        {
-            // чтобы избежать переполнения при больших x
-            if (x > 20) return 1;
-            if (x < -20) return -1;
+        // функция активации каждый пишет сам
 
-            double ex = Math.Exp(x);
-            double enx = Math.Exp(-x);
-            return (ex - enx) / (ex + enx);
+        private double HyperbolicTangent(double sum) // для гиперболического тангенса
+        {
+            double expon1 = Exp(sum);
+            double expon2 = Exp(-sum);
+            double outputTang = (expon1 - expon2) / (expon1 + expon2); // tan(x) = (e^x - e^(-x))/(e^x + e^(-x))
+            return outputTang; // возвращаем значение
         }
 
-        // Производная гиперболического тангенса
-        private double Tanh_Derivativator(double x)
+
+        // производная гиперболического тангенса
+        private double DerivativeHyperbolicTangent(double output)
         {
-            double t = Tanh(x);
-            return 1 - t * t;
+            return 1 - (output * output); // f'(x) = 1 - f(x)^2
         }
+
+
     }
 }
-
