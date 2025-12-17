@@ -38,18 +38,18 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
                     break;
 
                 case NetworkMode.Test:
-                    tmpArrStr = File.ReadAllLines(path + "train.txt");
-                    trainset = new double[tmpArrStr.Length, 16];
+                    tmpArrStr = File.ReadAllLines(path + "test.txt");
+                    testset = new double[tmpArrStr.Length, 16];
 
                     for (int i = 0; i < tmpArrStr.Length; i++)
                     {
                         tmpStr = tmpArrStr[i].Split(' ');
                         for (int j = 0; j < 16; j++)
                         {
-                            trainset[i, j] = double.Parse(tmpStr[j]);
+                            testset[i, j] = double.Parse(tmpStr[j]);
                         }
                     }
-                    Shuffling_Array_Rows(trainset);
+                    Shuffling_Array_Rows(testset);
                     break;
             }
         }

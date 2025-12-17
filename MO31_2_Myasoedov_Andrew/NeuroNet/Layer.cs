@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 
 namespace MO31_2_Myasoedov_Andrew.NeuroNet
 {
@@ -10,8 +14,8 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
         string pathFileWeights; // путь к файлу саниптическов весов
         protected int numofneurons; // число нейронов текущего слоя
         protected int numofprevneurons; // число нейронов предыдущего слоя
-        protected const double learningrate = 0.06; // скорость обучения 0.06
-        protected const double momentum = 0.000d; // момент инерции 0.050d
+        protected const double learningrate = 0.0265; // скорость обучения 0.06
+        protected const double momentum = 0.011d; // момент инерции 0.050d
         protected double[,] lastdeltaweights; // веса предыдущей итерации
         protected Neuron[] neurons; // массив нейронов текущего слоя
 
@@ -60,6 +64,59 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
             }
         }
 
+
+        private double[] InitializeWeightsWithConstraints(int count, Random random)
+        {
+            double[] rawWeights = new double[count];
+
+            // генерируем веса в [-1, 1]
+            for (int j = 0; j < count; j++)
+            {
+                rawWeights[j] = random.NextDouble() * 2.0 - 1.0;
+            }
+
+            // корректируем, чтобы среднее стало 0
+            double mean = rawWeights.Average();
+            for (int j = 0; j < count; j++)
+            {
+                rawWeights[j] -= mean;
+            }
+
+            // вычисляем текущий stddev
+            double variance = rawWeights.Sum(w => w * w) / count; // since mean is now 0
+            double currentStdDev = Math.Sqrt(variance);
+
+            // если текущий stddev > 0, масштабируем к stddev = 1
+            if (currentStdDev > 0)
+            {
+                double scale = 1.0 / currentStdDev;
+                for (int j = 0; j < count; j++)
+                {
+                    rawWeights[j] *= scale;
+                }
+            }
+
+            // проверяем, не вышли ли веса за [-1, 1] и корректируем, если нужно
+            double maxAbs = rawWeights.Max(Math.Abs);
+            if (maxAbs > 1.0)
+            {
+                // сжимаем все веса чтобы максимальный по модулю был 1
+                double rescale = 1.0 / maxAbs;
+                for (int j = 0; j < count; j++)
+                {
+                    rawWeights[j] *= rescale;
+                }
+
+                // после сжатия среднее может снова сдвинуться, корректируем его
+                double finalMean = rawWeights.Average();
+                for (int j = 0; j < count; j++)
+                {
+                    rawWeights[j] -= finalMean;
+                }
+            }
+
+            return rawWeights;
+        }
 
         // метод работы с массивом синаптических весов слоя
         public double[,] WeightInitialize(MemoryMode mm, string path)
@@ -112,26 +169,18 @@ namespace MO31_2_Myasoedov_Andrew.NeuroNet
 
                     for (int i = 0; i < numofneurons; i++)
                     {
-                        double weightSum = 0.0;
+                        int count = numofprevneurons + 1;
+                        double[] rawWeights = InitializeWeightsWithConstraints(count, random);
 
-                        // первый проход: генерируем веса и считаем сумму
-                        for (int j = 0; j < numofprevneurons + 1; j++)
+                        // сохраняем результат в массив weights
+                        for (int j = 0; j < count; j++)
                         {
-                            weights[i, j] = random.NextDouble() * 2.0 - 1.0;
-                            weightSum += weights[i, j];
-                        }
-
-                        // второй проход: корректируем для нулевого среднего
-                        double averageWeight = weightSum / (numofprevneurons + 1);
-                        for (int j = 0; j < numofprevneurons + 1; j++)
-                        {
-                            weights[i, j] -= averageWeight;
-                           
+                            weights[i, j] = rawWeights[j];
                         }
 
                         // запись в файл
-                        string[] memory_elemnt2 = new string[numofprevneurons + 1];
-                        for (int j = 0; j < numofprevneurons + 1; j++)
+                        string[] memory_elemnt2 = new string[count];
+                        for (int j = 0; j < count; j++)
                         {
                             memory_elemnt2[j] = weights[i, j]
                                 .ToString(System.Globalization.CultureInfo.InvariantCulture)

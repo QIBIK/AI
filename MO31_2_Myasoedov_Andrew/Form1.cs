@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms.DataVisualization.Charting;
 using MO31_2_Myasoedov_Andrew.NeuroNet;
 
 namespace MO31_2_Myasoedov_Andrew
@@ -82,10 +83,26 @@ namespace MO31_2_Myasoedov_Andrew
             for (int i = 0; i < network.E_errors_avr.Length; i++)
             {
                 chart_Eavr.Series[0].Points.AddY(network.E_errors_avr[i]);
+                chart_Accuracy.Series[0].Points.AddY(network.Accuracy_avr[i]);
             }
 
             MessageBox.Show("Обучение успешно завершено.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void button_Test_Click(object sender, EventArgs e)
+        {
+            network.Test(network);
+
+            for (int i = 0; i < network.E_errors_avr.Length; i++)
+            {
+                chart_Eavr.Series[0].Points.AddY(network.E_errors_avr[i]);
+                chart_Accuracy.Series[0].Points.AddY(network.Accuracy_avr[i]);
+            }
+
+            MessageBox.Show("Тестирование успешно завершено.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void chart1_Click(object sender, EventArgs e){}
+        private void chart_Eavr_Click(object sender, EventArgs e){}
     }
 }

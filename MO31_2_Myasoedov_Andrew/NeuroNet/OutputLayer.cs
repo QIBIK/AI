@@ -24,11 +24,11 @@
             double[] gr_sum = new double[numofprevneurons + 1];
 
             // вычисление градиентныых сумм
-            for (int j = 0; j < numofprevneurons + 1; j++)
+            for (int j = 0; j < numofprevneurons; j++)
             {
                 double sum = 0;
                 for (int k = 0; k < numofneurons; k++)
-                    sum += neurons[k].Weights[j] * errors[k];
+                    sum += neurons[k].Weights[j+1] * errors[k];
 
                 gr_sum[j] = sum;
             }
